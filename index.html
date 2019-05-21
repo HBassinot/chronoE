@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>W3.CSS Template</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+		<script src="timer.js"></script>
+
+		<style>
+			body,h1 {font-family: "Raleway", sans-serif}
+			body, html {height: 100%}
+			.bgimg {
+			  background-image: url('https://www.w3schools.com/w3images/forestbridge.jpg');
+			  min-height: 100%;
+			  background-position: center;
+			  background-size: cover;
+			}
+		</style>
+	</head>
+	
+	<body>
+
+	<div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+	  <div class="w3-display-topleft w3-padding-large w3-xlarge">
+		<span>config</span>
+
+		<div>
+			Currency:
+			<select id="currency">
+				<option value="usd">USD</option>
+				<option value="cad" selected="selected">CAD</option>
+				<option value="eur">EURO</option>
+			</select>
+			<br>
+
+			Tempo:
+			<select id="tempo">
+				<option value="h">horaire</option>
+				<option value="d">quotidient</option>
+				<option value="w">hebdomadaire</option>
+				<option value="m">mensuelle</option>
+				<option value="y" selected="selected">annuelle</option>				
+			</select>
+			<br>
+
+			Salaire:
+			<input type="text" value="90000" id="salary" />
+
+		</div>
+	  </div>
+
+	  <div class="w3-display-middle">
+		<h1 class="w3-jumbo w3-animate-top" style="font-family: sans-serif;">
+			<span id="earnedCount">0.00</span>
+			<span id="currencyVal"> CAD</span>
+		</h1>
+		<hr class="w3-border-grey" style="margin:auto;width:40%">
+
+		<div id="chronoExample">
+			<div class="values">00:00:00:00</div>
+			<div>
+				<button class="startButton">Start</button>
+				<button class="pauseButton" >Pause</button>
+				<button class="stopButton">Stop</button>
+				<button class="resetButton">Reset</button>
+			</div>
+		</div>
+	  </div>
+
+
+	</div>
+
+	<script>
+		var hourTic = 10 * 60 * 60;
+		var dayTic = hourTic * 24;
+		var weekTic = dayTic * 7;
+		var yearTic = weekTic * 52;
+		var monthTic = yearTic /12;
+		var tic = 0;
+		var earnedCount = 0;
+		var currencyVal = "CAD";
+
+		function getTic() {
+			tempo = $('#tempo').val();
+			if(tempo == "h") {
+				ticTmp = sal/hourTic;
+			} else if (tempo == "d") {
+				ticTmp = sal/dayTic;
+			} else if (tempo == "w") {
+				ticTmp = sal/weekTic;
+			} else if (tempo == "m") {
+				ticTmp = sal/monthTic;
+			} else if (tempo == "y") {
+				ticTmp = sal/yearTic;
+			}
+			return ticTmp;
+		}
+
+		$('#currency').change(function () {
+			currency = $('#currency').val();
+			if(currency == "cad") {
+				currencyVal = "CAD";
+			} else if(currency == "usd") {
+				currencyVal = "USD";
+			} else if(currency == "eur") {
+				currencyVal = "EUR";
+			}
+			$('#currencyVal').html(currencyVal);
+		});
+
+
+		$('#tempo').change(function () {
+			tic = getTic();
+		});
+		
+		var timer = new easytimer.Timer();
+		$('#chronoExample .startButton').click(function () {
+			sal = $('#salary').val();
+			tic = getTic();
+			timer.start({precision: 'secondTenths'});
+		});
+		$('#chronoExample .pauseButton').click(function () {
+			timer.pause();
+		});
+		$('#chronoExample .stopButton').click(function () {
+			timer.stop();
+			earnedCount = 0;
+		});
+		$('#chronoExample .resetButton').click(function () {
+			timer.reset();
+			timer.stop();
+			earnedCount = 0;
+			$('#earnedCount').html("0.00");
+		});
+		timer.addEventListener('secondTenthsUpdated', function (e) {
+			earnedCount += tic;
+			var a = earnedCount.toString().substring(0, earnedCount.toString().indexOf('.')+5);
+			$('#earnedCount').html(a);
+			$('#chronoExample .values').html(timer.getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths']));
+		});
+		timer.addEventListener('started', function (e) {
+			$('#chronoExample .values').html(timer.getTimeValues().toString());
+		});
+		timer.addEventListener('reset', function (e) {
+			$('#chronoExample .values').html(timer.getTimeValues().toString());
+		});
+	</script>
+
+	</body>
+</html>
+
