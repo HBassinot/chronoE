@@ -26,9 +26,9 @@
 
 	<div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
 	  <div class="w3-display-topleft w3-padding-large w3-xlarge">
-		<span style='content: "\2699";' id="gear-ctrl"></span>
+		<span style='' id="gear-ctrl">OOO</span>
 
-		<div>
+		<div id="panel-ctrl">
 			Currency:
 			<select id="currency">
 				<option value="usd">USD</option>
@@ -64,7 +64,7 @@
 			<div class="values">00:00:00:00</div>
 			<div>
 				<button class="startButton">Start</button>
-				<button class="pauseButton" >Pause</button>
+				<button class="pauseButton">Pause</button>
 				<button class="stopButton">Stop</button>
 				<button class="resetButton">Reset</button>
 			</div>
@@ -75,6 +75,11 @@
 	</div>
 
 	<script>
+	
+		$('#gear-ctrl').click(function () {
+			$('#panel-ctrl').toggle();
+		});
+		
 		var hourTic = 10 * 60 * 60;
 		var dayTic = hourTic * 24;
 		var weekTic = dayTic * 7;
